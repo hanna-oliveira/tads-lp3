@@ -1,5 +1,8 @@
 package br.edu.ifsp.orderflow;
 
+import br.edu.ifsp.orderflow.domain.Cliente;
+import br.edu.ifsp.orderflow.domain.ItemPedido;
+import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.Produto;
 import java.math.BigDecimal;
 import java.sql.SQLOutput;
@@ -25,8 +28,18 @@ public class Main {
                 new BigDecimal("1800.00")
         );
 
-        System.out.println(mouse.toString());
-        System.out.println(teclado.toString());
-        System.out.println(monitor.toString());
-};
+        Cliente ana = new Cliente("Ana", "ana@email.com");
+        Cliente bruno = new Cliente("Bruno", "bruno@email.com");
+
+        Pedido pedido1 = new Pedido(ana);
+        pedido1.adicionarItem(new ItemPedido(mouse, 2));
+        pedido1.adicionarItem(new ItemPedido(teclado, 1));
+
+        Pedido pedido2 = new Pedido(bruno);
+        pedido2.adicionarItem(new ItemPedido(monitor, 2));
+        pedido2.adicionarItem(new ItemPedido(teclado, 5));
+
+
+        System.out.println(pedido1);
+    }
 }
