@@ -1,11 +1,13 @@
 package br.edu.ifsp.orderflow.infra;
 
 
+import br.edu.ifsp.orderflow.domain.ItemPedido;
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.Produto;
 import br.edu.ifsp.orderflow.service.IEstoqueService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryEstoqueService implements IEstoqueService {
@@ -25,11 +27,41 @@ public class InMemoryEstoqueService implements IEstoqueService {
 
     @Override
     public boolean reservar(Pedido pedido) {
-        return false;
+
+        // Conferir se todos os produtos têm estoque
+        for (ItemPedido item : pedido.getItens()) {
+
+            int disponivel = this.quantidadeDisponivel(item.getProduto());
+
+            if (item.getQuantidade() > disponivel) {
+                return false;
+            }
+        }
+
+        for (ItemPedido item : pedido.getItens()) {
+
+            Produto produto = item.getProduto();
+            String produtoId = produto.getId(); // item.getProduto().getId()
+            int quantidadeAtual = this.estoque.getOrDefault(produtoId, 0);
+            this.estoque.put(produtoId, quantidadeAtual - item.getQuantidade());
+        }
+
+        return true;
     }
 
     @Override
     public void liberar(Pedido pedido) {
 
+//        List<ItemPedido> itens = pedido.getItens();
+//        for (ItemPedido item : itens) {
+//
+//            Produto produto = item.getProduto();
+//            int disponível = this.quantidadeDisponivel(item.getProduto());
+//            this.estoque.put(produto.getId(), disponível + item.getQuantidade());
+//        }
+
+        for (ItemPedido item : pedido.getItens()) {
+            this.adicionarEstoque(item.getProduto(), item.getQuantidade());
+        }
     }
 }
