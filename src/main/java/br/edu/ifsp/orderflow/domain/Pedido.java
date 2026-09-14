@@ -6,23 +6,24 @@ import java.util.List;
 import java.util.UUID;
 
 public class Pedido {
+
     private final String id;
     private final Cliente cliente;
     private final List<ItemPedido> itens;
     private EStatusPedido status;
 
-
     public Pedido(Cliente cliente) {
-        this.id = (UUID.randomUUID()).toString();
+        this.id = (UUID.randomUUID()).toString() ;
         this.cliente = cliente;
         this.itens = new ArrayList<>();
         this.status = EStatusPedido.CRIADO;
     }
 
-    public void adicionarItem (ItemPedido itens) {
-        this.itens.add(itens);
+    public void adicionarItem(ItemPedido item) {
+        this.itens.add(item);
     }
-    public BigDecimal calcularTotal(){
+
+    public BigDecimal calcularTotal() {
 
         BigDecimal total = BigDecimal.ZERO;
 
@@ -34,22 +35,36 @@ public class Pedido {
         return total;
     }
 
-    public void marcarComoPago(){
+    public void marcarComoPago() {
         this.status = EStatusPedido.PAGO;
     }
 
-    public void cancelar(){
+    public void cancelar() {
         this.status = EStatusPedido.CANCELADO;
     }
 
-    //*GETTERS
-    public String getId() {return id;}
-    public Cliente getCliente() {return cliente;}
-    public List<ItemPedido> getItens() {return itens;}
-    public EStatusPedido getStatus() {return status;}
+    public String getId() {
+        return id;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public List<ItemPedido> getItens() {
+        return itens;
+    }
+
+    public EStatusPedido getStatus() {
+        return status;
+    }
+
+    public String getIdCurto() {
+        return this.id.substring(0, 8);
+    }
 
     @Override
-    public String toString(){
-        return "Pedido[" + this.id + ", " + this.status + ", " + this.calcularTotal() + "]";
+    public String toString() {
+        return "Pedido[ ID: " + this.getIdCurto() + ", Status: " + this.status + ", Total R$: " + this.calcularTotal() + "]";
     }
 }
